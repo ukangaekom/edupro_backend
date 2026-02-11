@@ -1,0 +1,12 @@
+# Enviroment variable for all cargo commands
+[env]
+
+
+
+
+# Scope down tracing to filter out external libraries
+
+RUST_LOG="edupro_backend=debug"
+
+
+
