@@ -4,3 +4,5 @@ pub mod models;
 pub mod config;
 pub mod state;
 pub mod authentication;
+pub mod handlers;
+

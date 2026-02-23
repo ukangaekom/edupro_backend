@@ -16,6 +16,7 @@ pub struct AuthUser{
 
 
 
+
 #[inline]
 fn extract_auth_cookie(cookies: &str) -> Option<&str>{
     cookies.split(';').find_map(|c| {

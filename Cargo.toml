@@ -9,10 +9,12 @@ edition = "2021"
 
 
 [dependencies]
-axum = "0.8.8"
-axum-extra = { version="0.12", features=["typed-header", "query", "multipart"]}
-tower-http = {version="0.6.6", features=["fs"]}
+axum = {version="0.8.8", features=["ws"]}
+axum-extra = { version="0.12", features=["query", "multipart","cookie"]}
+tower = "0.4"
+tower-http = {version="0.6.6", features=["fs","cors"]}
 tower-cookies = "0.11"
+tower_governor = "0.6.0"
 
 
 
@@ -26,11 +28,12 @@ serde_with="3"
 uuid = { version = "1", features = ["serde", "v4"] }
 chrono = { version = "0.4", features = ["serde"] }
 
-
-
 # Database Related
 sqlx = { version = "0.7",   features = ["runtime-tokio-rustls","postgres","macros","uuid","chrono","json","migrate"] }
 
+
+# utils
+futures-util = "0.3.31"
 
 
 #Authentication

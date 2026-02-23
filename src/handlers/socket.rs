@@ -1,16 +1,16 @@
 use axum::{
-    extract::ws::WebSocketUpgrade,
+    extract::ws::{WebSocketUpgrade, WebSocket, Message},
     http::StatusCode,
     response::IntoResponse,
 };
-use axum_extra::extract::TypedHeader;
-use headers::Cookie;
+use axum_extra::extract::{CookieJar,cookie::Cookie};
+use futures_util::StreamExt;
 
 
 
 // Creating the websocket Hanlder
 async fn ws_handler(
-     TypedHeader(cookies): TypedHeader<Cookie>,
+    jar: CookieJar,
     ws: WebSocketUpgrade
 
 ) -> impl IntoResponse{
