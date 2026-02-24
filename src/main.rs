@@ -107,18 +107,18 @@ async fn main(){
 
     // App Router initialization
     let route_all = Router::new()
+        .layer(GovernorLayer{config: governor_conf.into()})
         .layer(middleware::from_fn(auth_middleware::auth_middleware))
-        .merge(organization::route_register::routes())
         .merge(organization::route_login::routes())
-        .merge(user::route_register::routes())
         .merge(user::route_login::routes())
+        .merge(user::route_register::routes())
+        .merge(organization::route_register::routes())
         .layer(middleware::map_response(main_reponse_mapper))
         .layer(CookieManagerLayer::new())
-        .layer(GovernorLayer{config: governor_conf.into()})
         .fallback(error_handler)
         .with_state(app_state);
 
-
+ 
 
     // Setting Listener
     let listener: TcpListener = tokio::net::TcpListener::bind("0.0.0.0:8000")
