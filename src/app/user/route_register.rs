@@ -1,7 +1,9 @@
 use crate::errors::error::{Error, Result};
+use crate::models::user::input::UserRegisterPayload;
 use serde::Deserialize;
 use axum::{Json,Router,extract::State};
 use axum::routing::post;
+use axum::extract::Extension;
 use serde_json::{Value, json};
 use axum::http::StatusCode;
 use sqlx::PgPool;
@@ -20,7 +22,7 @@ pub fn routes() -> Router<AppState>{
 
 
 
-async fn api_register(State(state): State<AppState>, payload:Json<RegisterPayload>) -> Result<Json<Value>>{
+async fn api_register(State(state): State<AppState>, payload:Json<UserRegisterPayload>) -> Result<Json<Value>>{
 
     println!("--> {:<12} - user api_register", "Handle");
 
@@ -74,11 +76,3 @@ async fn api_register(State(state): State<AppState>, payload:Json<RegisterPayloa
 
 
 
-#[derive(Debug, Deserialize)]
-struct RegisterPayload{
-    firstname:String,
-    lastname: String,
-    email:String,
-    username: String,
-    pwd: String,
-}

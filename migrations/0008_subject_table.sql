@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS subjects(
+    id SERIAL PRIMARY KEY,
+    subject_name TEXT UNIQUE NOT NULL
+
+)

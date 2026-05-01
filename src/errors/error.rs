@@ -1,5 +1,8 @@
 use axum::response::{IntoResponse, Response};
-use axum::http::StatusCode;
+use serde::Serialize;
+use axum::{http::StatusCode, Json};
+use std::borrow::Cow;
+
 
 
 
@@ -7,18 +10,41 @@ use axum::http::StatusCode;
 pub type Result<T> = core::result::Result<T, Error>;
 
 
+#[derive(Serialize)]
+pub struct ErrorPayload{
+    pub error: Cow<'static, str>,
+    pub code: u16
+}
+
+
 #[derive(Debug)]
 pub enum Error{
     LoginFail,
-    RegistrationFail
+    RegistrationFail,
+    InvalidRequest,
+    NoSubscription,
+    NoPermission,
 }
 
 
 impl IntoResponse for Error{
-    fn into_response(self) -> Response{
-        println!("->> {:<12} - {self:?}", "INTO_RES");
+    fn into_response(self) -> Response{ 
 
-        (StatusCode::INTERNAL_SERVER_ERROR, "UNHANDLED_CLIENT_ERROR").into_response()
+        let (status, error_message) = match self {
+
+            Self::LoginFail => (StatusCode::UNAUTHORIZED, "Login Failed"),
+            Self::RegistrationFail => (StatusCode::BAD_REQUEST, "Registration Failed"),
+            Self::InvalidRequest => (StatusCode::BAD_REQUEST, "Invalid Payload"),
+            Self::NoSubscription => (StatusCode::FORBIDDEN, "Upgrade Your Plan"),
+            Self::NoPermission => (StatusCode::FORBIDDEN, "You are not authorized to use this service"),
+        };
+
+        let error_payload = ErrorPayload{
+            error: Cow::Borrowed(error_message),
+            code: status.as_u16(),
+        };
+       
+        (status,Json(error_payload)).into_response()
     }
 
 }

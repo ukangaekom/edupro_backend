@@ -9,7 +9,7 @@ use uuid::Uuid;
 
 use crate::state::AppState;
 
-#[derive(Clone)]
+#[derive(Clone)]    
 pub struct AuthUser{
     pub id: Uuid,
 }
@@ -37,11 +37,12 @@ pub async fn auth_middleware(
             .ok_or(StatusCode::UNAUTHORIZED)?;
 
 
-        let user_id = verify_jwt(cookie).await;
+        let user_id = verify_jwt(cookie).await.ok_or(StatusCode::UNAUTHORIZED)?;
 
 
-        req.extensions_mut().insert(AuthUser{id: user_id.expect("REASON")});
+        req.extensions_mut().insert(AuthUser{id: user_id});
 
         Ok(next.run(req).await)
 
 }
+

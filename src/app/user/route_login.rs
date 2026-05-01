@@ -1,5 +1,6 @@
 use crate::errors::error::{Error, Result};
 use crate::authentication::*;
+use crate::models::user::input::LoginPayload;
 use serde::{Deserialize,Serialize};
 use axum::{Json, Router,response::IntoResponse,extract::State};
 use serde_json::{Value, json};
@@ -111,25 +112,4 @@ async fn api_login(State(state): State<AppState>, cookies: Cookies, payload:Json
 
    
 
-}
-
-
-// Implementation of api_login to be non-static
-
-
-#[derive(Debug,Serialize)]
-struct User{
-    id: Uuid,
-    password: String,
-    // role: String
-}
-
-
-// Request
-
-
-#[derive(Debug, Deserialize)]
-struct LoginPayload{
-    email: String,
-    pwd: String,
 }

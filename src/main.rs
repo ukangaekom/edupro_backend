@@ -5,6 +5,8 @@ mod models;
 mod app;
 mod state;
 mod authentication;
+mod middlewares;
+mod pipeline;
 
 use axum::{
     routing::{get,post},
@@ -25,28 +27,15 @@ use std::env;
 
 // Crates
 use crate::state::AppState;
+use crate::middlewares::response::main_response_mapper;
 use crate::authentication::auth_middleware;
 use crate::errors::error::{error_handler};
+use crate::pipeline::loader::load_question_csv_to_db;
 
 
 pub use self::app::{organization, user};
 pub use self::errors::error::{Error, Result};
 
-
-
-
-
-
-// Main Response Mapper
-async fn main_reponse_mapper(res:Response) -> impl IntoResponse {
-    println!("->> {:<12} - Main_res", "RES Mapper");
-
-
-    println!();
-
-    res
-
-}
 
 
 
@@ -58,10 +47,12 @@ async fn main(){
     dotenvy::dotenv().ok();
 
     let db_url= env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+
+    println!("Database URL: {}", db_url);
     // Creation of database connection pool
     let pool = PgPoolOptions::new()
-        .min_connections(10)              // warm pool
-        .max_connections(200)             // scale limit (important!)
+        .min_connections(1)              // warm pool
+        .max_connections(50)             // scale limit (important!)
         .acquire_timeout(Duration::from_secs(5))
         .idle_timeout(Duration::from_secs(300))
         .max_lifetime(Duration::from_secs(1800))
@@ -103,20 +94,25 @@ async fn main(){
        }
    });
 
-    let app_state = AppState { db: pool};
+    let mut app_state = AppState { db: pool};
+
+    // let _ = load_question_csv_to_db(&mut app_state.db).await;
 
     // App Router initialization
     let route_all = Router::new()
         .layer(GovernorLayer{config: governor_conf.into()})
+        .merge(user::route_accounts::routes())
         .layer(middleware::from_fn(auth_middleware::auth_middleware))
         .merge(organization::route_login::routes())
         .merge(user::route_login::routes())
         .merge(user::route_register::routes())
         .merge(organization::route_register::routes())
-        .layer(middleware::map_response(main_reponse_mapper))
+        .layer(middleware::map_response(main_response_mapper))
         .layer(CookieManagerLayer::new())
         .fallback(error_handler)
         .with_state(app_state);
+
+
 
  
 

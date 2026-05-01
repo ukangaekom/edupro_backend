@@ -1,10 +1,12 @@
 use crate::errors::error::{Error, Result};
 use crate::authentication::*;
+use crate::models::organization::input::LoginPayload;
 use serde::{Deserialize,Serialize};
 use axum::{Json, Router,response::IntoResponse,extract::State};
 use serde_json::{Value, json};
 use axum::routing::post;
 use axum::http::StatusCode;
+use axum::extract::Extension;
 use tower_cookies::{Cookies};
 use sqlx::{PgPool, FromRow,Row,types::Uuid};
 use cookie::{Cookie,SameSite, time::Duration};
@@ -114,23 +116,4 @@ async fn api_login(State(state): State<AppState>, cookies: Cookies, payload:Json
 }
 
 
-// Implementation of api_login to be non-static
-
-
-#[derive(Debug,Serialize)]
-struct Organization{
-    id: Uuid,
-    password: String,
-    // role: String
-}
-
-
-// Request
-
-
-#[derive(Debug, Deserialize)]
-struct LoginPayload{
-    email: String,
-    pwd: String,
-}
 

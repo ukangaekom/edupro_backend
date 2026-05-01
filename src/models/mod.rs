@@ -1,3 +1,3 @@
 pub mod organization;
-pub mod quiz;
+pub mod exam;
 pub mod user;

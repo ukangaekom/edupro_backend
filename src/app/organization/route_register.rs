@@ -1,12 +1,15 @@
 use crate::errors::error::{Error, Result};
 use serde::{Deserialize};
+use crate::models::organization::input::OrganizationRegisterPayload;
 use axum::{Json,Router,extract::State};
 use axum::routing::post;
+use axum::extract::Extension;
 use serde_json::{Value, json};
-use axum::http::StatusCode;
 use sqlx::PgPool;
 use crate::state::AppState;
 use crate::authentication::*;
+
+
 
 
 // Router
@@ -70,10 +73,3 @@ async fn api_register(State(state): State<AppState>, payload:Json<OrganizationRe
 
 
 
-#[derive(Debug, Deserialize)]
-struct OrganizationRegisterPayload{
-    organization:String,
-    contact_email: String,
-    contact_phone:String,
-    pwd: String,
-}
