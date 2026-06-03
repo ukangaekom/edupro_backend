@@ -39,8 +39,24 @@ async fn get_account_details(
 
 
 
-pub async fn set_account_details()/*-> user_account_details*/{
-    todo!()
+async fn set_account_details(
+     Extension(auth_user): Extension<AuthUser>,
+)-> Json<user_account_details>{
+     println!("User ID {}", auth_user.id);
+
+    let mut user_details = user_account_details{
+        firstname: "Ekomabasi".to_string(),
+        lastname: "Ukanga".to_string(),
+        email: "ekomabasiuk@gmail.com".to_string(),
+        username: "ekomzy".to_string(),
+        total_xps: 1000,
+        rank: 1,
+        total_exams_taken: 10,
+        total_practices_taken: 10
+        
+    };
+
+    Json(user_details)
 }
 
 

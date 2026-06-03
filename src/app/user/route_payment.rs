@@ -20,7 +20,8 @@ pub fn routes() -> Router<AppState>{
 
 
 
-pub async fn subscribe(){
+pub async fn subscribe(Extension(auth_user): Extension<AuthUser>,
+)-> Json<subscription>{
     todo!()
 }
 

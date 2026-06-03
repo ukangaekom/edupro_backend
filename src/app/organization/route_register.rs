@@ -15,6 +15,7 @@ use crate::authentication::*;
 // Router
 pub fn routes() -> Router<AppState>{
     Router::new().route("/api/organization/register", post(api_register))
+    // .route("/api/organization/otp",post())
 }
 
 

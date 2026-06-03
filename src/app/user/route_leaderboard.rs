@@ -18,6 +18,7 @@ pub fn routes() -> Router<AppState>{
 
 
 
-pub async fn get_leaderboard(){
+pub async fn get_leaderboard(Extension(auth_user): Extension<AuthUser>,
+)-> Json<organization_leaderboard>{
     todo!()
 }

@@ -12,11 +12,12 @@ use crate::authentication::*;
 // Router
 pub fn routes() -> Router<AppState>{
     Router::new().route("/api/user/practice/", post(start_practice))
-    .route("/api/user/:practice_id/:subject_id/:question_id/", post(click_option))
+    .route("/api/user/{practice_id}/{subject_id}/{question_id}/", post(click_option))
 }
 
 
 
-pub async fn click_option(){
+pub async fn click_option(Extension(auth_user): Extension<AuthUser>,
+)-> Json<selected_option>{
     todo!()
 }

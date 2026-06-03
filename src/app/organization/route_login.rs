@@ -17,6 +17,7 @@ use crate::state::AppState;
 // Router
 pub fn routes() -> Router<AppState>{
     Router::new().route("/api/organization/login", post(api_login))
+    //  .route("/api/organization/otp",post())
 }
 
 
