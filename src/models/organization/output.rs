@@ -43,7 +43,7 @@ pub struct organzation_question_bank{
     pub total_questions: i32,
     pub page: i32,
     pub per_page: i32,
-    pub questions: Vec<question>,
+    pub questions: Vec<Question>,
 }
 
 

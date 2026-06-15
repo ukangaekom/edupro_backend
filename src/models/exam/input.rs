@@ -12,7 +12,7 @@ use uuid::Uuid;
 // Question
 
 #[derive(Serialize, Deserialize)]
-pub struct answer_question{
+pub struct AnswerQuestion{
     pub id: i32
 }
 
@@ -20,7 +20,7 @@ pub struct answer_question{
 //Exams
 
 #[derive(Serialize, Deserialize)]
-pub struct set_exams{
+pub struct SetExams{
     pub organization_id: Uuid,
     pub exam_name: String,
     pub start_date: String,
@@ -31,8 +31,9 @@ pub struct set_exams{
 }
 
 
+
 #[derive(Serialize, Deserialize)]
-pub struct register_exam_payload{
+pub struct RegisterExamPayload{
     pub user_id: Uuid,
     pub exam_id: i32,
     pub subjects: String
@@ -40,14 +41,14 @@ pub struct register_exam_payload{
 
 
 #[derive(Serialize, Deserialize)]
-pub struct start_exam_payload{
+pub struct StartExamPayload{
     pub user_id: Uuid,
     pub exams_id: i32,
 }
 
 
 #[derive(Serialize, Deserialize)]
-pub struct practice_exam_payload{
+pub struct PracticeExamPayload{
     pub user_id: Uuid,
     pub practice_id: i32,
     pub subjects: String,
@@ -56,7 +57,7 @@ pub struct practice_exam_payload{
 
 
 #[derive(Serialize, Deserialize)]
-pub struct submit_exams{
+pub struct SubmitExams{
     pub session_id: i64
 }
 

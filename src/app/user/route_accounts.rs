@@ -2,9 +2,10 @@ use crate::models::user::{input::*, output::*};
 use crate::models::exam::{input::*, output::*};
 use axum::{Json,Router};
 use axum::routing::{post, get};
-use axum::extract::Extension;
+use axum::extract::{Extension,State};
 use crate::state::AppState;
 use crate::authentication::auth_middleware::AuthUser;
+use crate::database::user::{write::*,read::*};
 
 
 
@@ -17,34 +18,37 @@ pub fn routes() -> Router<AppState>{
 
 
 async fn get_account_details(
+    State(state): State<AppState>,
     Extension(auth_user): Extension<AuthUser>,
-) -> Json<user_account_details> {
+) -> Json<UserAccountDetails> {
     
     println!("User ID {}", auth_user.id);
 
-    let user_details = user_account_details{
-        firstname: "Ekomabasi".to_string(),
-        lastname: "Ukanga".to_string(),
-        email: "ekomabasiuk@gmail.com".to_string(),
-        username: "ekomzy".to_string(),
-        total_xps: 1000,
-        rank: 1,
-        total_exams_taken: 10,
-        total_practices_taken: 10
-        
-    };
+    let account = get_user_account_details(auth_user.id,&state.db).await;
 
-    Json(user_details)
+    // let user_details = UserAccountDetails{
+    //     firstname: "Ekomabasi".to_string(),
+    //     lastname: "Ukanga".to_string(),
+    //     email: "ekomabasiuk@gmail.com".to_string(),
+    //     username: "ekomzy".to_string(),
+    //     total_xps: 1000,
+    //     rank: 1,
+    //     total_exams_taken: 10,
+    //     total_practices_taken: 10
+        
+    // };
+
+    Json(account.expect("REASON"))
 }
 
 
 
 async fn set_account_details(
      Extension(auth_user): Extension<AuthUser>,
-)-> Json<user_account_details>{
+)-> Json<UserAccountDetails>{
      println!("User ID {}", auth_user.id);
 
-    let mut user_details = user_account_details{
+    let mut user_details = UserAccountDetails{
         firstname: "Ekomabasi".to_string(),
         lastname: "Ukanga".to_string(),
         email: "ekomabasiuk@gmail.com".to_string(),

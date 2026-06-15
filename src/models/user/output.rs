@@ -1,4 +1,5 @@
 use serde::{Deserialize,Serialize};
+use sqlx::FromRow;
 
 use crate::models::exam::output::*;
 
@@ -7,8 +8,8 @@ use crate::models::exam::output::*;
 
 
 
-#[derive(Serialize, Deserialize)]
-pub struct user_account_details{
+#[derive(Serialize, Deserialize,FromRow)]
+pub struct UserAccountDetails{
     pub firstname: String, 
     pub lastname: String, 
     pub email: String,
@@ -25,7 +26,7 @@ pub struct user_account_details{
 
 #[derive(Serialize, Deserialize)]
 pub struct user_registered_exams{
-    pub exams: Vec<exam_details>,
+    pub exams: Vec<ExamDetails>,
 
 }
 
@@ -38,7 +39,7 @@ pub struct user_registered_exams{
 
 #[derive(Serialize, Deserialize)]
 pub struct user_exam_scores{
-    pub exams: Vec<exam_details>,
+    pub exams: Vec<ExamDetails>,
     pub scores: Vec<i32>,
     pub percents: Vec<f32>
 }
@@ -47,7 +48,7 @@ pub struct user_exam_scores{
 
 #[derive(Serialize, Deserialize)]
 pub struct user_practice_scores{
-    pub practices: Vec<exam_details>,
+    pub practices: Vec<ExamDetails>,
     pub scores: Vec<i32>,
     pub percents: Vec<f32>
 

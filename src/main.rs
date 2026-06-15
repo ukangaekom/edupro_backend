@@ -7,6 +7,7 @@ mod state;
 mod authentication;
 mod middlewares;
 mod pipeline;
+mod database;
 
 use axum::{
     routing::{get,post},
@@ -96,13 +97,14 @@ async fn main(){
 
     let mut app_state = AppState { db: pool};
 
-    let _ = load_question_csv_to_db(&mut app_state.db).await;
+    // let _ = load_question_csv_to_db(&mut app_state.db).await;
 
     // App Router initialization
     let route_all = Router::new()
         .layer(GovernorLayer{config: governor_conf.into()})
         .merge(user::route_accounts::routes())
         .merge(user::route_analytics::routes())
+        .merge(user::route_practice::routes())
         .layer(middleware::from_fn(auth_middleware::auth_middleware))
         .merge(organization::route_login::routes())
         .merge(user::route_login::routes())

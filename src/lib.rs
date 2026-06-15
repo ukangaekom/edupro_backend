@@ -7,3 +7,4 @@ pub mod authentication;
 pub mod handlers;
 pub mod pipeline;
 pub mod middlewares;
+pub mod database;
