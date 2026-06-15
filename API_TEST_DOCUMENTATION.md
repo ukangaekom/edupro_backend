@@ -154,7 +154,7 @@ The active routes are mounted in `src/main.rs` as of current source:
 
 ### 5) Get user account details
 - Path: `GET /api/user/account`
-- Purpose: fetch the authenticated user's account info
+- Purpose: fetch the authenticated user's account info from the database
 - Authentication: required via `auth` cookie
 - Request body: none
 - Response body: JSON
@@ -171,20 +171,52 @@ The active routes are mounted in `src/main.rs` as of current source:
 }
 ```
 - Notes:
-  - Currently returns hardcoded static account details in the source.
-  - No request payload is accepted, even though the route name is `account/set` for the other endpoint.
+  - `GET /api/user/account` uses the authenticated user ID from the cookie.
+  - The route should return stored account values, but the current source may still be returning static placeholders for some fields.
 
 ### 6) Set user account details
 - Path: `POST /api/user/account/set`
-- Purpose: currently returns user account details
+- Purpose: update or return account details for the authenticated user
 - Authentication: required via `auth` cookie
 - Request body: none
 - Response body: same as `GET /api/user/account`
 - Notes:
-  - The current implementation does not accept or store a request body.
-  - It returns the same static account details as the GET endpoint.
+  - The current implementation does not accept or persist a request body.
+  - It returns static account values rather than updating the user record.
 
-### 7) Get exam analytics for user
+### 7) Get available practice exam types
+- Path: `GET /api/user/practice`
+- Purpose: fetch practice exam types available to the authenticated user
+- Authentication: required via `auth` cookie
+- Request body: none
+- Response body: JSON array of exam type objects
+- Notes:
+  - This route is implemented in `src/app/user/route_practice.rs`.
+  - It returns exam type metadata from the database.
+
+### 8) Get practice exam subjects by type
+- Path: `GET /api/user/practice/{exam_type_id}/subjects`
+- Purpose: fetch subjects for a chosen practice exam type
+- Authentication: required via `auth` cookie
+- URL parameter:
+  - `exam_type_id` = integer exam type identifier
+- Request body: none
+- Response body: JSON array of exam subject objects
+- Notes:
+  - The current handler in `src/app/user/route_practice.rs` ignores the `exam_type_id` path parameter.
+  - It may return all subjects instead of filtering by exam type.
+
+### 9) Practice exam session
+- Path: `POST /api/user/exams`
+- Purpose: create or fetch a practice exam session for the authenticated user
+- Authentication: required via `auth` cookie
+- Request body: none (placeholder)
+- Response body: JSON placeholder / not implemented
+- Notes:
+  - This route is declared in `src/app/user/route_exams.rs` but currently contains `todo!()`.
+  - The practical implementation should return practice exam details and session metadata.
+
+### 10) Get exam analytics for user
 - Path: `POST /api/user/{exam_id}/analytics`
 - Purpose: fetch analytics for a completed exam
 - Authentication: required via `auth` cookie
