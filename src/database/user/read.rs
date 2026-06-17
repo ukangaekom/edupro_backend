@@ -13,9 +13,9 @@ pub async fn get_user_account_details(user_id: Uuid, pool:&PgPool)-> Result<User
             u.email,
             COALESCE(u.username, '') AS username,
             COALESCE(ur.total_xp, 0) AS total_xps,
-            COALESCE(rnk.rank, 0) AS rank,
-            COALESCE(sess.exam_count, 0) AS total_exams_taken,
-            COALESCE(sess.practice_count, 0) AS total_practices_taken
+            COALESCE(rnk.rank, 0)::int4 AS rank,
+            COALESCE(sess.exam_count, 0)::int4 AS total_exams_taken,
+            COALESCE(sess.practice_count, 0)::int4 AS total_practices_taken
         FROM users u
         LEFT JOIN user_rank ur
             ON ur.user_id = u.id
